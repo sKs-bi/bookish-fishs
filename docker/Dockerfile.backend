@@ -1,0 +1,17 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --registry=https://registry.npmmirror.com
+
+COPY . .
+
+RUN mkdir -p uploads backups
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+
+CMD ["node", "src/app.js"]
