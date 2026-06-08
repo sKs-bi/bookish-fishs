@@ -4,6 +4,7 @@ import { formatDate, formatCurrency, getStatusBadgeClass, getStatusText } from '
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import RejectionModal from '../components/RejectionModal';
+import UserCard from '../components/UserCard';
 
 const Assets = () => {
   const [assets, setAssets] = useState([]);
@@ -409,7 +410,15 @@ const Assets = () => {
                     </td>
                     <td className="table-cell text-xs sm:text-sm">{formatCurrency(asset.purchase_price)}</td>
                     <td className="table-cell text-xs sm:text-sm">{formatDate(asset.last_repair_date) || '-'}</td>
-                    <td className="table-cell text-xs sm:text-sm">{asset.responsible?.real_name || '-'}</td>
+                    <td className="table-cell text-xs sm:text-sm">
+                      {asset.responsible_id ? (
+                        <UserCard userId={asset.responsible_id}>
+                          {asset.responsible?.real_name || '-'}
+                        </UserCard>
+                      ) : (
+                        <span className="text-gray-500">-</span>
+                      )}
+                    </td>
                     <td className="table-cell text-xs sm:text-sm max-w-[100px] truncate" title={asset.remarks}>{asset.remarks || '-'}</td>
                     <td className="table-cell text-center">
                       <button 

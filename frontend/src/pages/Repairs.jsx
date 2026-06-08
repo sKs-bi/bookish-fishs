@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { repairAPI, assetAPI } from '../services/api';
 import { formatDateTime, getStatusBadgeClass, getStatusText, formatCurrency } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
+import UserCard from '../components/UserCard';
 
 const Repairs = () => {
   const [repairs, setRepairs] = useState([]);
@@ -148,7 +149,15 @@ const Repairs = () => {
                       <p className="font-medium">{item.asset?.name}</p>
                       <p className="text-xs text-gray-500">{item.asset?.asset_code}</p>
                     </td>
-                    <td className="table-cell">{item.reporter?.real_name}</td>
+                    <td className="table-cell">
+                      {item.reporter_id ? (
+                        <UserCard userId={item.reporter_id}>
+                          {item.reporter?.real_name || '-'}
+                        </UserCard>
+                      ) : (
+                        <span className="text-gray-500">-</span>
+                      )}
+                    </td>
                     <td className="table-cell text-gray-500">{formatDateTime(item.created_at)}</td>
                     <td className="table-cell">{formatCurrency(item.repair_cost)}</td>
                     <td className="table-cell"><span className={`badge ${getStatusBadgeClass(item.status)}`}>{getStatusText(item.status)}</span></td>

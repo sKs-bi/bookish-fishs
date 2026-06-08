@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { assetAPI } from '../services/api';
 import { formatDate, getStatusBadgeClass, getStatusText } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
+import UserCard from '../components/UserCard';
 
 const AssetLoan = () => {
   const [loans, setLoans] = useState([]);
@@ -124,7 +125,15 @@ const AssetLoan = () => {
                   <tr key={loan.id} className="hover:bg-gray-50">
                     <td className="table-cell font-mono text-sm">{loan.asset?.asset_code}</td>
                     <td className="table-cell font-medium">{loan.asset?.name}</td>
-                    <td className="table-cell">{loan.user?.real_name}</td>
+                    <td className="table-cell">
+                      {loan.user_id ? (
+                        <UserCard userId={loan.user_id}>
+                          {loan.user?.real_name || '-'}
+                        </UserCard>
+                      ) : (
+                        <span className="text-gray-500">-</span>
+                      )}
+                    </td>
                     <td className="table-cell max-w-xs truncate">{loan.purpose || '-'}</td>
                     <td className="table-cell">{formatDate(loan.expected_return_date)}</td>
                     <td className="table-cell">

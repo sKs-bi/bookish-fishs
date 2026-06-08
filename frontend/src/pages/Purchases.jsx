@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { purchaseAPI, assetAPI } from '../services/api';
 import { formatDateTime, getStatusBadgeClass, getStatusText } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
+import UserCard from '../components/UserCard';
 
 const getDisplayStatusText = (status, isSuperAdmin) => {
   if (isSuperAdmin && status === 'dept_pending') {
@@ -141,7 +142,15 @@ const Purchases = () => {
                     <td className="table-cell font-medium">{item.name}</td>
                     <td className="table-cell">{item.quantity}</td>
                     <td className="table-cell">¥{item.total_price || 0}</td>
-                    <td className="table-cell">{item.applicant?.real_name}</td>
+                    <td className="table-cell">
+                      {item.applicant_id ? (
+                        <UserCard userId={item.applicant_id}>
+                          {item.applicant?.real_name || '-'}
+                        </UserCard>
+                      ) : (
+                        <span className="text-gray-500">-</span>
+                      )}
+                    </td>
                     <td className="table-cell text-gray-500">{formatDateTime(item.created_at)}</td>
                     <td className="table-cell"><span className={`badge ${getStatusBadgeClass(item.status)}`}>{getDisplayStatusText(item.status, isSuperAdmin)}</span></td>
                     <td className="table-cell">
