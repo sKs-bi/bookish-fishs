@@ -158,13 +158,14 @@ const UserCard = ({ userId, children }) => {
 
   return (
     <>
-      <span
+      <button
         ref={triggerRef}
         onClick={handleClick}
-        className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+        type="button"
+        className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline bg-transparent border-none p-0 font-inherit text-inherit"
       >
         {children}
-      </span>
+      </button>
 
       {showCard && (
         <div
