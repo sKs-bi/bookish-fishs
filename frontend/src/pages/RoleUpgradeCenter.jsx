@@ -94,8 +94,8 @@ const RoleUpgradeCenter = () => {
 
   if (user?.role === 'super_admin') {
     return (
-      <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-gray-800">申请中心</h1>
+      <div className="space-y-4 sm:space-y-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">申请中心</h1>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-blue-700">您已是超级管理员，无需申请升级。</p>
         </div>
@@ -104,9 +104,9 @@ const RoleUpgradeCenter = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">申请中心</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">申请中心</h1>
         {targets.length > 0 && !hasPendingRequest && (
           <button onClick={() => setShowModal(true)} className="btn btn-primary">
             发起升级申请
@@ -174,7 +174,7 @@ const RoleUpgradeCenter = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>

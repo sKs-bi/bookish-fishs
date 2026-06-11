@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import useAuthStore from '../stores/authStore';
 import { useNavigate, Link } from 'react-router-dom';
+import { authAPI } from '../services/api';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotUsername, setForgotUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState('');
+  const [forgotSuccess, setForgotSuccess] = useState('');
   const { login } = useAuthStore();
   const navigate = useNavigate();
 
@@ -28,6 +36,51 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotError('');
+    setForgotSuccess('');
+
+    if (!forgotUsername) {
+      setForgotError('请输入用户名');
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      setForgotError('新密码长度不能少于6位');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setForgotError('两次输入的密码不一致');
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      await authAPI.forgotPassword({ username: forgotUsername, newPassword });
+      setForgotSuccess('密码重置成功，请使用新密码登录');
+      setTimeout(() => {
+        setShowForgotModal(false);
+        setForgotUsername('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setForgotSuccess('');
+      }, 2000);
+    } catch (err) {
+      setForgotError(err.response?.data?.message || '密码重置失败');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const closeForgotModal = () => {
+    setShowForgotModal(false);
+    setForgotUsername('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setForgotError('');
+    setForgotSuccess('');
   };
 
   return (
@@ -80,12 +133,12 @@ const Login = () => {
       </div>
 
       <div className="login-content">
-        <div className="login-header animate-login-title" style={{ transform: 'rotate(-3deg)' }}>
+        <div className="login-header animate-login-title">
           <h1 className="login-title">
             数<span className="login-char-zhi">智</span>科<span className="login-char-ji">技</span>产业学院
           </h1>
         </div>
-        <div className="login-header-sub animate-login-sub" style={{ transform: 'rotate(-2deg)' }}>
+        <div className="login-header-sub animate-login-sub">
           <p className="login-subtitle">
             DIGITAL <span className="login-char-zhi">I</span>NTELLIGENCE <span className="login-char-ji">T</span>ECHNOLOGY INDUSTRY COLLEGE
           </p>
@@ -162,13 +215,19 @@ const Login = () => {
                     <>
                       <svg className="login-spinner" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c03.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
                       登录中...
                     </>
                   ) : '登 录'}
                 </span>
               </button>
+
+              <div className="login-forgot-link">
+                <button type="button" onClick={() => setShowForgotModal(true)}>
+                  忘记密码？
+                </button>
+              </div>
             </form>
 
             <div className="login-footer">
@@ -177,6 +236,61 @@ const Login = () => {
             </div>
           </div>
         </div>
+
+        {/* 忘记密码弹窗 */}
+        {showForgotModal && (
+          <div className="modal-overlay" onClick={closeForgotModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>重置密码</h3>
+                <button className="modal-close" onClick={closeForgotModal}>&times;</button>
+              </div>
+              <form onSubmit={handleForgotPassword} className="modal-body">
+                {forgotError && (
+                  <div className="modal-error">{forgotError}</div>
+                )}
+                {forgotSuccess && (
+                  <div className="modal-success">{forgotSuccess}</div>
+                )}
+                <div className="modal-field">
+                  <label>用户名</label>
+                  <input
+                    type="text"
+                    value={forgotUsername}
+                    onChange={(e) => setForgotUsername(e.target.value)}
+                    placeholder="请输入用户名"
+                  />
+                </div>
+                <div className="modal-field">
+                  <label>新密码</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="请输入新密码（至少6位）"
+                  />
+                </div>
+                <div className="modal-field">
+                  <label>确认密码</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="请再次输入新密码"
+                  />
+                </div>
+                <div className="modal-actions">
+                  <button type="button" className="btn-cancel" onClick={closeForgotModal}>
+                    取消
+                  </button>
+                  <button type="submit" className="btn-submit" disabled={forgotLoading}>
+                    {forgotLoading ? '处理中...' : '确认重置'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <p className="login-copyright">© 2024 数智科技产业学院 · 资产管理平台</p>
       </div>

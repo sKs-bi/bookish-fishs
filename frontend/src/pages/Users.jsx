@@ -93,14 +93,14 @@ const Users = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">用户管理</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">用户管理</h1>
       </div>
 
       <div className="card p-4">
-        <form onSubmit={handleSearch} className="flex flex-wrap gap-4 items-end">
-          <div className="flex-1 min-w-[200px]">
+        <form onSubmit={handleSearch} className="flex flex-wrap gap-3 sm:gap-4 items-end">
+          <div className="flex-1 min-w-[150px] sm:min-w-[200px]">
             <label className="label">关键词搜索</label>
             <input
               type="text"
@@ -110,7 +110,7 @@ const Users = () => {
               placeholder="搜索用户名、姓名、邮箱..."
             />
           </div>
-          <div className="w-32">
+          <div className="w-28 sm:w-32">
             <label className="label">角色</label>
             <select
               value={filters.role}
@@ -123,7 +123,7 @@ const Users = () => {
               <option value="normal_user">普通用户</option>
             </select>
           </div>
-          <div className="w-32">
+          <div className="w-28 sm:w-32">
             <label className="label">状态</label>
             <select
               value={filters.status}
@@ -136,7 +136,7 @@ const Users = () => {
               <option value="frozen">已冻结</option>
             </select>
           </div>
-          <div className="w-36">
+          <div className="w-28 sm:w-36">
             <label className="label">所属部门</label>
             <select
               value={filters.department_id}
@@ -253,7 +253,7 @@ const Users = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">
             共 {total} 条记录，第 {page} / {Math.ceil(total / pageSize)} 页
           </p>

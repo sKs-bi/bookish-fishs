@@ -105,7 +105,7 @@ const PurchaseApplication = sequelize.define('PurchaseApplication', {
         comment: '超级管理员审核意见'
     },
     status: {
-        type: DataTypes.ENUM('draft', 'dept_pending', 'super_pending', 'approved', 'rejected', 'withdrawn'),
+        type: DataTypes.ENUM('draft', 'dept_pending', 'approved', 'rejected', 'withdrawn'),
         defaultValue: 'draft',
         comment: '状态'
     }

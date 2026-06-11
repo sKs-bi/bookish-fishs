@@ -50,6 +50,7 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
   getCurrentUser: () => api.get('/auth/current'),
   changePassword: (data) => api.put('/auth/password', data),
+  forgotPassword: (data) => api.post('/auth/forgot-password', data),
 };
 
 export const userAPI = {
@@ -146,6 +147,11 @@ export const roleUpgradeAPI = {
   getAllRequests: (params) => api.get('/role-upgrade/all', { params }),
   approveRequest: (id, data) => api.put(`/role-upgrade/${id}/approve`, data),
   rejectRequest: (id, data) => api.put(`/role-upgrade/${id}/reject`, data),
+};
+
+export const aiAPI = {
+  chat: (message, apiKey) => api.post('/ai/chat', { message, apiKey }),
+  getAssets: (apiKey) => api.post('/ai/assets', { apiKey }),
 };
 
 export default api;

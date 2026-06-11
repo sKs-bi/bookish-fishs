@@ -5,21 +5,16 @@ const { User } = require('../models');
 const auth = async (req, res, next) => {
     try {
         const authHeader = req.header('Authorization');
-        console.log('[AUTH] Authorization header:', authHeader ? 'Bearer ***' + authHeader.slice(-10) : 'null');
-        
         const token = authHeader?.replace('Bearer ', '');
 
         if (!token) {
-            console.log('[AUTH] No token provided');
             return res.status(401).json({ code: 401, message: '未授权，请先登录' });
         }
 
         let decoded;
         try {
             decoded = jwt.verify(token, config.jwt.secret);
-            console.log('[AUTH] Token decoded, userId:', decoded.userId);
         } catch (jwtError) {
-            console.log('[AUTH] JWT verify error:', jwtError.name, jwtError.message);
             if (jwtError.name === 'TokenExpiredError') {
                 return res.status(401).json({ code: 401, message: '登录已过期，请重新登录' });
             }
@@ -29,21 +24,17 @@ const auth = async (req, res, next) => {
         const user = await User.findByPk(decoded.userId);
 
         if (!user) {
-            console.log('[AUTH] User not found for id:', decoded.userId);
             return res.status(401).json({ code: 401, message: '用户不存在' });
         }
 
         if (user.status !== 'active') {
-            console.log('[AUTH] User account disabled:', user.username);
             return res.status(401).json({ code: 401, message: '账号已被禁用' });
         }
 
         req.user = user;
         req.token = token;
-        console.log('[AUTH] Auth success for user:', user.username, 'role:', user.role);
         next();
     } catch (error) {
-        console.log('[AUTH] Unexpected error:', error.message);
         return res.status(401).json({ code: 401, message: '认证失败' });
     }
 };

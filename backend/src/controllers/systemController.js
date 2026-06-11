@@ -7,7 +7,7 @@ const config = require('../config');
 
 const getAuditLogs = async (req, res, next) => {
     try {
-        const { page = 1, pageSize = 20, module, action, start_date, end_date, keyword } = req.query;
+        const { page = 1, pageSize = 20, module, action, start_date, end_date, keyword, result, department_id } = req.query;
         const offset = (page - 1) * pageSize;
         const where = {};
 
@@ -15,6 +15,7 @@ const getAuditLogs = async (req, res, next) => {
         if (action) where.action = action;
         if (start_date) where.operate_time = { ...where.operate_time, [Op.gte]: new Date(start_date) };
         if (end_date) where.operate_time = { ...where.operate_time, [Op.lte]: new Date(end_date + ' 23:59:59') };
+        if (result) where.result = result;
 
         if (keyword) {
             where[Op.or] = [
@@ -24,20 +25,68 @@ const getAuditLogs = async (req, res, next) => {
             ];
         }
 
-        if (req.user.role === 'dept_admin') {
-            where.user_id = { [Op.in]: sequelize.literal(`(SELECT id FROM users WHERE department_id = ${req.user.department_id})`) };
-        } else if (req.user.role === 'normal_user') {
-            where.user_id = req.user.id;
+        // 仅管理员可访问审计日志
+        if (req.user.role === 'normal_user') {
+            return res.status(403).json({ code: 403, message: '权限不足，仅管理员可访问审计日志' });
         }
 
-        const { count, rows } = await AuditLog.findAndCountAll({
-            where,
-            offset: parseInt(offset),
-            limit: parseInt(pageSize),
-            order: [['operate_time', 'DESC']]
+        // 构建SQL查询条件
+        let deptCondition = '';
+        if (department_id) {
+            deptCondition = `AND u.department_id = ${parseInt(department_id)}`;
+        }
+
+        // 部门管理员可查看本部门用户的日志
+        let roleCondition = '';
+        if (req.user.role === 'dept_admin') {
+            roleCondition = `AND al.user_id IN (SELECT id FROM users WHERE department_id = ${req.user.department_id})`;
+        }
+        // 超级管理员可查看全部日志
+
+        // 使用原生SQL查询以获取所属院系名称
+        const resultRows = await sequelize.query(`
+            SELECT
+                al.*,
+                d.name as department_name
+            FROM audit_logs al
+            LEFT JOIN users u ON al.user_id = u.id
+            LEFT JOIN departments d ON u.department_id = d.id
+            WHERE 1=1
+            ${module ? `AND al.module = '${module}'` : ''}
+            ${action ? `AND al.action = '${action}'` : ''}
+            ${result ? `AND al.result = '${result}'` : ''}
+            ${start_date ? `AND al.operate_time >= '${start_date}'` : ''}
+            ${end_date ? `AND al.operate_time <= '${end_date} 23:59:59'` : ''}
+            ${keyword ? `AND (al.user_name LIKE '%${keyword}%' OR al.user_code LIKE '%${keyword}%' OR al.action_name LIKE '%${keyword}%')` : ''}
+            ${deptCondition}
+            ${roleCondition}
+            ORDER BY al.operate_time DESC
+            LIMIT ${parseInt(pageSize)} OFFSET ${parseInt(offset)}
+        `, {
+            type: sequelize.QueryTypes.SELECT
         });
 
-        res.json({ code: 200, message: 'success', data: { items: rows, total: count, page: parseInt(page), pageSize: parseInt(pageSize) } });
+        // 获取总数
+        const countResult = await sequelize.query(`
+            SELECT COUNT(*) as total
+            FROM audit_logs al
+            LEFT JOIN users u ON al.user_id = u.id
+            WHERE 1=1
+            ${module ? `AND al.module = '${module}'` : ''}
+            ${action ? `AND al.action = '${action}'` : ''}
+            ${result ? `AND al.result = '${result}'` : ''}
+            ${start_date ? `AND al.operate_time >= '${start_date}'` : ''}
+            ${end_date ? `AND al.operate_time <= '${end_date} 23:59:59'` : ''}
+            ${keyword ? `AND (al.user_name LIKE '%${keyword}%' OR al.user_code LIKE '%${keyword}%' OR al.action_name LIKE '%${keyword}%')` : ''}
+            ${deptCondition}
+            ${roleCondition}
+        `, {
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        const total = countResult[0]?.total || 0;
+
+        res.json({ code: 200, message: 'success', data: { items: resultRows, total, page: parseInt(page), pageSize: parseInt(pageSize) } });
     } catch (error) {
         next(error);
     }
@@ -286,7 +335,7 @@ const getStatistics = async (req, res, next) => {
         const pendingLoans = await AssetLoan.count({ where: { status: 'pending' } });
         const overdueLoans = await AssetLoan.count({ where: { status: 'overdue' } });
 
-        const pendingPurchases = await PurchaseApplication.count({ where: { status: { [Op.in]: ['dept_pending', 'super_pending'] } } });
+        const pendingPurchases = await PurchaseApplication.count({ where: { status: { [Op.in]: ['dept_pending'] } } });
 
         const pendingRepairs = await RepairApplication.count({ where: { status: { [Op.in]: ['pending', 'in_repair'] } } });
 

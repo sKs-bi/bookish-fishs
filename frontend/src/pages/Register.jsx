@@ -12,11 +12,130 @@ const Register = () => {
     phone: '',
     department_id: ''
   });
+  const [errors, setErrors] = useState({});
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+
+  // 验证规则
+  const validateField = (name, value) => {
+    let error = '';
+
+    switch (name) {
+      case 'username':
+        if (!value) {
+          error = '用户名不能为空';
+        } else if (value.length < 4 || value.length > 20) {
+          error = '用户名长度为4-20个字符';
+        } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = '用户名只能包含字母、数字、下划线';
+        }
+        break;
+
+      case 'password':
+        if (!value) {
+          error = '密码不能为空';
+        } else if (value.length < 6 || value.length > 20) {
+          error = '密码长度为6-20个字符';
+        } else if (!/[a-zA-Z]/.test(value)) {
+          error = '密码必须包含字母';
+        } else if (!/\d/.test(value)) {
+          error = '密码必须包含数字';
+        }
+        break;
+
+      case 'confirmPassword':
+        if (!value) {
+          error = '请确认密码';
+        } else if (value !== formData.password) {
+          error = '两次输入的密码不一致';
+        }
+        break;
+
+      case 'real_name':
+        if (!value) {
+          error = '真实姓名不能为空';
+        } else if (value.length < 2 || value.length > 20) {
+          error = '真实姓名长度为2-20个字符';
+        } else if (!/^[\u4e00-\u9fa5a-zA-Z]+$/.test(value)) {
+          error = '真实姓名只能包含中文或字母';
+        }
+        break;
+
+      case 'phone':
+        if (!value) {
+          error = '手机号不能为空';
+        } else if (!/^1[2-9]\d{9}$/.test(value)) {
+          error = '请输入正确的11位手机号';
+        }
+        break;
+
+      case 'email':
+        if (value && !/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(value)) {
+          error = '请输入正确的邮箱格式';
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    return error;
+  };
+
+  // 实时验证
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // 实时验证当前字段
+    const fieldError = validateField(name, value);
+    setErrors({ ...errors, [name]: fieldError });
+
+    // 如果修改了密码，需要重新验证确认密码
+    if (name === 'password' && formData.confirmPassword) {
+      const confirmError = validateField('confirmPassword', formData.confirmPassword);
+      setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
+    }
+  };
+
+  // 失焦验证
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const fieldError = validateField(name, value);
+    setErrors({ ...errors, [name]: fieldError });
+  };
+
+  // 表单提交验证
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // 验证所有必填字段
+    const fieldsToValidate = ['username', 'password', 'confirmPassword', 'real_name', 'phone'];
+
+    fieldsToValidate.forEach(field => {
+      const error = validateField(field, formData[field]);
+      if (error) {
+        newErrors[field] = error;
+        isValid = false;
+      }
+    });
+
+    // 验证邮箱（如果填写了）
+    if (formData.email) {
+      const emailError = validateField('email', formData.email);
+      if (emailError) {
+        newErrors.email = emailError;
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   useEffect(() => {
     const fetchDepts = async () => {
@@ -37,28 +156,12 @@ const Register = () => {
     fetchDepts();
   }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!formData.username || !formData.password || !formData.real_name) {
-      setError('用户名、密码和真实姓名不能为空');
-      return;
-    }
-    if (!formData.phone) {
-      setError('手机号不能为空');
-      return;
-    }
-    if (formData.password.length < 6) {
-      setError('密码长度不能少于6位');
-      return;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      setError('两次输入的密码不一致');
+    // 验证表单
+    if (!validateForm()) {
       return;
     }
 
@@ -158,9 +261,13 @@ const Register = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="input"
+                onBlur={handleBlur}
+                className={`input ${errors.username ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="请输入工号或学号"
               />
+              {errors.username && (
+                <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+              )}
             </div>
 
             <div>
@@ -170,9 +277,13 @@ const Register = () => {
                 name="real_name"
                 value={formData.real_name}
                 onChange={handleChange}
-                className="input"
+                onBlur={handleBlur}
+                className={`input ${errors.real_name ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="请输入真实姓名"
               />
+              {errors.real_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.real_name}</p>
+              )}
             </div>
 
             <div>
@@ -182,9 +293,13 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="input"
-                placeholder="请输入密码（至少6位）"
+                onBlur={handleBlur}
+                className={`input ${errors.password ? 'border-red-500 focus:border-red-500' : ''}`}
+                placeholder="请输入密码（6-20位，需包含字母和数字）"
               />
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
             </div>
 
             <div>
@@ -194,9 +309,13 @@ const Register = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="input"
+                onBlur={handleBlur}
+                className={`input ${errors.confirmPassword ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="请再次输入密码"
               />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+              )}
             </div>
 
             <div>
@@ -206,9 +325,13 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="input"
+                onBlur={handleBlur}
+                className={`input ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="选填"
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
             <div>
               <label className="label">手机号 <span className="text-red-500">*</span></label>
@@ -217,9 +340,13 @@ const Register = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="input"
+                onBlur={handleBlur}
+                className={`input ${errors.phone ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="请输入手机号"
               />
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              )}
             </div>
 
             <div>

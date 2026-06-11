@@ -1,8 +1,8 @@
+import UserCard from '../components/UserCard';
 import { useState, useEffect } from 'react';
 import { repairAPI, assetAPI } from '../services/api';
 import { formatDateTime, getStatusBadgeClass, getStatusText, formatCurrency } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
-import UserCard from '../components/UserCard';
 
 const Repairs = () => {
   const [repairs, setRepairs] = useState([]);
@@ -13,6 +13,7 @@ const Repairs = () => {
   const [showModal, setShowModal] = useState(false);
   const [assets, setAssets] = useState([]);
   const [filters, setFilters] = useState({ status: '' });
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
   const [formData, setFormData] = useState({ asset_id: '', fault_description: '' });
   const { user } = useAuthStore();
 
@@ -103,15 +104,15 @@ const Repairs = () => {
   const isSuperAdmin = user?.role === 'super_admin';
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">维修管理</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap gap-2 items-center justify-between">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">维修管理</h1>
         <button onClick={() => setShowModal(true)} className="btn btn-primary">提交报修</button>
       </div>
 
       <div className="card p-4">
-        <div className="flex gap-4">
-          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-40">
+        <div className="flex gap-3 sm:gap-4">
+          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-full sm:w-40">
             <option value="">全部状态</option>
             <option value="pending">待审核</option>
             <option value="in_repair">维修中</option>
@@ -149,15 +150,27 @@ const Repairs = () => {
                       <p className="font-medium">{item.asset?.name}</p>
                       <p className="text-xs text-gray-500">{item.asset?.asset_code}</p>
                     </td>
-                    <td className="table-cell">
-                      {item.reporter_id ? (
-                        <UserCard userId={item.reporter_id}>
-                          {item.reporter?.real_name || '-'}
-                        </UserCard>
-                      ) : (
-                        <span className="text-gray-500">-</span>
-                      )}
-                    </td>
+                    <td className="table-cell relative">
+                        {item.reporter_id ? (
+                          <span
+                            className="user-name-link"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.target.getBoundingClientRect();
+                              setUserCardInfo({ show: true, userId: item.reporter_id, x: rect.left, y: rect.bottom + 5 });
+                            }}
+                          >
+                            {item.reporter?.real_name || '-'}
+                          </span>
+                        ) : (
+                          <span>{item.reporter?.real_name || '-'}</span>
+                        )}
+                        {userCardInfo.show && userCardInfo.userId === item.reporter_id && (
+                          <div style={{ position: 'fixed', left: userCardInfo.x, top: userCardInfo.y }}>
+                            <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
+                          </div>
+                        )}
+                      </td>
                     <td className="table-cell text-gray-500">{formatDateTime(item.created_at)}</td>
                     <td className="table-cell">{formatCurrency(item.repair_cost)}</td>
                     <td className="table-cell"><span className={`badge ${getStatusBadgeClass(item.status)}`}>{getStatusText(item.status)}</span></td>
@@ -190,7 +203,7 @@ const Repairs = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>

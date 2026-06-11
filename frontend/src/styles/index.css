@@ -133,7 +133,7 @@ body {
   }
   100% {
     opacity: 1;
-    transform: rotate(-3deg) scale(1) translateY(0);
+    transform: rotate(0deg) scale(1) translateY(0);
   }
 }
 
@@ -151,7 +151,7 @@ body {
   }
   100% {
     opacity: 0.75;
-    transform: rotate(-2deg) scale(1) translateX(0);
+    transform: rotate(0deg) scale(1) translateX(0);
   }
 }
 
@@ -778,10 +778,421 @@ body {
   .text-responsive {
     font-size: 0.875rem;
   }
+
+  /* 登录页手机端适配 */
+  .login-card-inner {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .login-logo-wrap {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+  }
+
+  .login-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+  }
+
+  .login-logo-ring {
+    inset: -3px;
+    border-radius: 15px;
+  }
+
+  .login-card-title {
+    font-size: 1.05rem;
+  }
+
+  .login-field-input {
+    padding: 0.7rem 0.875rem 0.7rem 2.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .login-field-icon {
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .login-submit {
+    padding: 0.8rem 1.25rem;
+  }
+
+  .login-submit-text {
+    font-size: 0.875rem;
+  }
+
+  .login-orb-1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .login-orb-2 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .login-orb-3 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .login-geo-anim-1 svg,
+  .login-geo-anim-2 svg,
+  .login-geo-anim-3 svg,
+  .login-geo-anim-4 svg,
+  .login-geo-anim-5 svg {
+    transform: scale(0.6);
+  }
+
+  .login-card-desc {
+    margin-bottom: 1.25rem;
+  }
+
+  .login-form {
+    gap: 1rem;
+  }
+
+  .login-footer {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .login-copyright {
+    font-size: 0.6rem;
+  }
+
+  /* 弹窗手机端适配 */
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    border-radius: 12px;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  /* 用户信息卡片手机端适配 */
+  .user-card {
+    min-width: 220px;
+    max-width: 280px;
+    right: 8px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card-inner {
+    padding: 1.5rem 1rem;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.5rem;
+  }
+
+  .login-field-input {
+    padding: 0.65rem 0.75rem 0.65rem 2.25rem;
+    font-size: 0.75rem;
+  }
 }
 
 @media (max-width: 320px) {
   html {
     font-size: 14px;
   }
+}
+
+/* 用户信息卡片样式 */
+.user-card-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  background: transparent;
+}
+
+.user-card {
+  position: fixed;
+  z-index: 9999;
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  min-width: 260px;
+  max-width: 320px;
+  animation: cardFadeIn 0.2s ease forwards;
+  pointer-events: auto;
+  border: 1px solid #e5e7eb;
+  opacity: 1 !important;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1 !important;
+    transform: translateY(0);
+  }
+}
+
+.user-name-link {
+  color: #3b82f6;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.user-name-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* 忘记密码页面样式 */
+.forgot-verify-info {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.forgot-verify-info p {
+  margin: 4px 0;
+}
+
+.forgot-verify-info strong {
+  color: #1e293b;
+}
+
+.forgot-success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.forgot-success-icon {
+  width: 64px;
+  height: 64px;
+  color: #22c55e;
+  margin: 0 auto 16px;
+}
+
+.forgot-success h3 {
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.forgot-success p {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.login-footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.login-footer-divider {
+  color: #cbd5e1;
+}
+
+/* 忘记密码链接样式 */
+.login-forgot-link {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.login-forgot-link button {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.login-forgot-link button:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: #64748b;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-field {
+  margin-bottom: 16px;
+}
+
+.modal-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.modal-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.modal-field input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modal-error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.modal-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  color: #64748b;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.btn-submit {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

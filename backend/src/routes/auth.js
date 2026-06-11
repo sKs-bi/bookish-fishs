@@ -26,4 +26,9 @@ router.put('/password', auth, [
     body('newPassword').isLength({ min: 6 }).withMessage('新密码长度不能少于6位')
 ], validate, authController.changePassword);
 
+router.post('/forgot-password', [
+    body('username').notEmpty().withMessage('用户名不能为空'),
+    body('newPassword').isLength({ min: 6 }).withMessage('新密码长度不能少于6位')
+], validate, authController.forgotPassword);
+
 module.exports = router;

@@ -27,7 +27,7 @@ const getDisplayStatusText = (status, isSuperAdmin) => {
     'withdrawn': '已撤回',
     'draft': '草稿',
     'dept_pending': '部门待审',
-    'super_pending': '待终审',
+    
     'from_approved': '调出已审',
     'to_approved': '调入已审',
     'super_approved': '终审已审',
@@ -164,7 +164,7 @@ const RoleUpgradeApproval = () => {
       let ids = [];
       if (activeTab === 'purchases') {
         ids = purchases.filter(p => 
-          ((p.status === 'dept_pending' || p.status === 'super_pending') && isSuperAdmin && p.applicant_id !== user?.id) ||
+          ((p.status === 'dept_pending' ) && isSuperAdmin && p.applicant_id !== user?.id) ||
           (p.status === 'dept_pending' && isDeptAdmin && p.applicant_id !== user?.id)
         ).map(p => p.id);
       } else if (activeTab === 'loans') {
@@ -200,7 +200,6 @@ const RoleUpgradeApproval = () => {
         let auditType = 'dept';
         if (isSuperAdmin) {
           auditType = 'super';
-        } else if (filterStatus === 'super_pending') {
           auditType = 'super';
         }
         await purchaseAPI.batchAudit({ ids: selectedIds, action, auditType });
@@ -223,7 +222,7 @@ const RoleUpgradeApproval = () => {
   const getSelectableCount = () => {
     if (activeTab === 'purchases') {
       return purchases.filter(p => 
-        ((p.status === 'dept_pending' || p.status === 'super_pending') && isSuperAdmin && p.applicant_id !== user?.id) ||
+        ((p.status === 'dept_pending' ) && isSuperAdmin && p.applicant_id !== user?.id) ||
         (p.status === 'dept_pending' && isDeptAdmin && p.applicant_id !== user?.id)
       ).length;
     } else if (activeTab === 'loans') {
@@ -240,7 +239,6 @@ const RoleUpgradeApproval = () => {
           <>
             <option value="">全部状态</option>
             <option value="dept_pending">待审核</option>
-            <option value="super_pending">待终审</option>
             <option value="approved">已通过</option>
             <option value="rejected">已驳回</option>
             <option value="withdrawn">已撤回</option>
@@ -251,7 +249,6 @@ const RoleUpgradeApproval = () => {
         <>
           <option value="">全部状态</option>
           <option value="dept_pending">部门待审</option>
-          <option value="super_pending">待终审</option>
           <option value="approved">已通过</option>
           <option value="rejected">已驳回</option>
           <option value="withdrawn">已撤回</option>
@@ -311,7 +308,7 @@ const RoleUpgradeApproval = () => {
             <tr><td colSpan="9" className="text-center py-8 text-gray-500">暂无数据</td></tr>
           ) : (
             purchases.map((item) => {
-              const canSelect = ((item.status === 'dept_pending' || item.status === 'super_pending') && isSuperAdmin && item.applicant_id !== user?.id) ||
+              const canSelect = ((item.status === 'dept_pending' ) && isSuperAdmin && item.applicant_id !== user?.id) ||
                                (item.status === 'dept_pending' && isDeptAdmin && item.applicant_id !== user?.id);
               return (
                 <tr key={item.id} className={`hover:bg-gray-50 ${selectedIds.includes(item.id) ? 'bg-blue-50' : ''}`}>
@@ -339,7 +336,7 @@ const RoleUpgradeApproval = () => {
                           <button onClick={() => handlePurchaseAudit(item.id, 'dept', 'reject')} className="text-red-600 hover:text-red-800 text-sm">驳回</button>
                         </>
                       )}
-                      {(item.status === 'dept_pending' || item.status === 'super_pending') && isSuperAdmin && item.applicant_id !== user?.id && (
+                      {(item.status === 'dept_pending' ) && isSuperAdmin && item.applicant_id !== user?.id && (
                         <>
                           <button onClick={() => handlePurchaseAudit(item.id, 'super', 'approve')} className="text-green-600 hover:text-green-800 text-sm">通过</button>
                           <button onClick={() => handlePurchaseAudit(item.id, 'super', 'reject')} className="text-red-600 hover:text-red-800 text-sm">驳回</button>
@@ -511,9 +508,9 @@ const RoleUpgradeApproval = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">审批中心</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">审批中心</h1>
         {showBatchButtons() && selectedIds.length > 0 && (
           <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full border border-blue-100">
             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
@@ -583,7 +580,7 @@ const RoleUpgradeApproval = () => {
         <div className="p-4">
           <div className="flex items-center gap-4">
             <label className="text-sm text-gray-600">状态筛选：</label>
-            <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }} className="input w-40">
+            <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }} className="input w-full sm:w-40">
               {getStatusFilterOptions()}
             </select>
             {showBatchButtons() && (
@@ -598,7 +595,7 @@ const RoleUpgradeApproval = () => {
           {activeTab === 'repairs' && renderRepairs()}
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>

@@ -54,9 +54,9 @@ const Backups = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">数据备份</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">数据备份</h1>
         <button onClick={handleBackup} className="btn btn-primary">
           创建备份
         </button>
@@ -116,7 +116,7 @@ const Backups = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>

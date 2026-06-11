@@ -1,8 +1,8 @@
+import UserCard from '../components/UserCard';
 import { useState, useEffect } from 'react';
 import { purchaseAPI, assetAPI } from '../services/api';
 import { formatDateTime, getStatusBadgeClass, getStatusText } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
-import UserCard from '../components/UserCard';
 
 const getDisplayStatusText = (status, isSuperAdmin) => {
   if (isSuperAdmin && status === 'dept_pending') {
@@ -20,6 +20,7 @@ const Purchases = () => {
   const [showModal, setShowModal] = useState(false);
   const [assetTypes, setAssetTypes] = useState([]);
   const [filters, setFilters] = useState({ status: '' });
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
   const [formData, setFormData] = useState({ name: '', type_id: '', spec: '', quantity: 1, estimated_price: '', purpose: '', required_date: '' });
   const { user } = useAuthStore();
 
@@ -92,22 +93,17 @@ const Purchases = () => {
   const isSuperAdmin = user?.role === 'super_admin';
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">采购申请</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap gap-2 items-center justify-between">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">采购申请</h1>
         <button onClick={() => setShowModal(true)} className="btn btn-primary">新建申请</button>
       </div>
 
       <div className="card p-4">
-        <div className="flex gap-4">
-          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-40">
+        <div className="flex gap-3 sm:gap-4">
+          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-full sm:w-40">
             <option value="">全部状态</option>
-            {isSuperAdmin ? (
-              <option value="dept_pending">待审核</option>
-            ) : (
-              <option value="dept_pending">部门待审</option>
-            )}
-            <option value="super_pending">待终审</option>
+            <option value="dept_pending">待审核</option>
             <option value="approved">已通过</option>
             <option value="rejected">已驳回</option>
             <option value="withdrawn">已撤回</option>
@@ -142,15 +138,27 @@ const Purchases = () => {
                     <td className="table-cell font-medium">{item.name}</td>
                     <td className="table-cell">{item.quantity}</td>
                     <td className="table-cell">¥{item.total_price || 0}</td>
-                    <td className="table-cell">
-                      {item.applicant_id ? (
-                        <UserCard userId={item.applicant_id}>
-                          {item.applicant?.real_name || '-'}
-                        </UserCard>
-                      ) : (
-                        <span className="text-gray-500">-</span>
-                      )}
-                    </td>
+                    <td className="table-cell relative">
+                        {item.applicant_id ? (
+                          <span
+                            className="user-name-link"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.target.getBoundingClientRect();
+                              setUserCardInfo({ show: true, userId: item.applicant_id, x: rect.left, y: rect.bottom + 5 });
+                            }}
+                          >
+                            {item.applicant?.real_name || '-'}
+                          </span>
+                        ) : (
+                          <span>{item.applicant?.real_name || '-'}</span>
+                        )}
+                        {userCardInfo.show && userCardInfo.userId === item.applicant_id && (
+                          <div style={{ position: 'fixed', left: userCardInfo.x, top: userCardInfo.y }}>
+                            <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
+                          </div>
+                        )}
+                      </td>
                     <td className="table-cell text-gray-500">{formatDateTime(item.created_at)}</td>
                     <td className="table-cell"><span className={`badge ${getStatusBadgeClass(item.status)}`}>{getDisplayStatusText(item.status, isSuperAdmin)}</span></td>
                     <td className="table-cell">
@@ -161,13 +169,13 @@ const Purchases = () => {
                             <button onClick={() => handleAudit(item.id, 'dept', 'reject')} className="text-red-600 hover:text-red-800 text-sm">驳回</button>
                           </>
                         )}
-                        {(item.status === 'dept_pending' || item.status === 'super_pending') && isSuperAdmin && item.applicant_id !== user?.id && (
+                        {item.status === 'dept_pending' && isSuperAdmin && item.applicant_id !== user?.id && (
                           <>
                             <button onClick={() => handleAudit(item.id, 'super', 'approve')} className="text-green-600 hover:text-green-800 text-sm">通过</button>
                             <button onClick={() => handleAudit(item.id, 'super', 'reject')} className="text-red-600 hover:text-red-800 text-sm">驳回</button>
                           </>
                         )}
-                        {['draft', 'dept_pending', 'super_pending'].includes(item.status) && item.applicant_id === user?.id && (
+                        {['draft', 'dept_pending'].includes(item.status) && item.applicant_id === user?.id && (
                           <button onClick={() => handleWithdraw(item.id)} className="text-gray-600 hover:text-gray-800 text-sm">撤回</button>
                         )}
                       </div>
@@ -179,7 +187,7 @@ const Purchases = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>
@@ -197,7 +205,7 @@ const Purchases = () => {
                 <label className="label">资产名称 *</label>
                 <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="input" required />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="label">资产类型</label>
                   <select value={formData.type_id} onChange={(e) => setFormData({ ...formData, type_id: e.target.value })} className="input">
@@ -210,7 +218,7 @@ const Purchases = () => {
                   <input type="number" min="1" value={formData.quantity} onChange={(e) => setFormData({ ...formData, quantity: e.target.value })} className="input" required />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="label">预估单价</label>
                   <input type="number" step="0.01" value={formData.estimated_price} onChange={(e) => setFormData({ ...formData, estimated_price: e.target.value })} className="input" />

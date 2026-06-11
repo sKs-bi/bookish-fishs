@@ -18,6 +18,7 @@ const repairRoutes = require('./routes/repairs');
 const systemRoutes = require('./routes/system');
 const rejectionRoutes = require('./routes/rejections');
 const roleUpgradeRoutes = require('./routes/roleUpgrade');
+const aiRoutes = require('./routes/ai');
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use('/api/repairs', repairRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/rejections', rejectionRoutes);
 app.use('/api/role-upgrade', roleUpgradeRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ code: 404, message: '接口不存在' });

@@ -247,39 +247,9 @@ const deleteAsset = async (req, res, next) => {
             }
         }
 
+        // 普通用户无权删除资产
         if (req.user.role === 'normal_user') {
-            if (asset.status === 'pending_delete') {
-                return res.status(400).json({ code: 400, message: '该资产已在删除审核中' });
-            }
-            if (asset.status === 'in_use') {
-                return res.status(400).json({ code: 400, message: '使用中的资产不能申请删除，请先归还' });
-            }
-            if (asset.status === 'repairing') {
-                return res.status(400).json({ code: 400, message: '维修中的资产不能申请删除' });
-            }
-            if (asset.status === 'pending') {
-                return res.status(400).json({ code: 400, message: '待审核的资产不能申请删除' });
-            }
-            const beforeData = asset.toJSON();
-            asset.status = 'pending_delete';
-            asset.delete_requested_by = req.user.id;
-            await asset.save();
-
-            await logAction({
-                user: { id: req.user.id, real_name: req.user.real_name, username: req.user.username },
-                ip: req.ip,
-                module: '资产管理',
-                action: 'request_delete',
-                actionName: '申请删除资产',
-                entityType: 'Asset',
-                entityId: parseInt(id),
-                beforeData,
-                afterData: { status: 'pending_delete' },
-                result: 'success',
-                userAgent: req.get('user-agent')
-            });
-
-            return res.json({ code: 200, message: '删除申请已提交，等待管理员审核', data: asset });
+            return res.status(403).json({ code: 403, message: '权限不足，普通用户无法删除资产' });
         }
 
         if (!['idle', 'scrapped', 'pending_delete'].includes(asset.status)) {

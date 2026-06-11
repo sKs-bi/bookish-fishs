@@ -41,7 +41,7 @@ export const getStatusText = (status) => {
     'withdrawn': '已撤回',
     'draft': '草稿',
     'dept_pending': '部门待审',
-    'super_pending': '待终审',
+    
     'from_approved': '调出已审',
     'to_approved': '调入已审',
     'super_approved': '终审已审',
@@ -73,7 +73,7 @@ export const getStatusBadgeClass = (status) => {
     'withdrawn': 'badge-gray',
     'draft': 'badge-gray',
     'dept_pending': 'badge-warning',
-    'super_pending': 'badge-warning',
+    
     'completed': 'badge-success',
     'in_progress': 'badge-primary',
     'verified': 'badge-success',

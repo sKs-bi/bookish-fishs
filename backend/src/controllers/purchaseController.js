@@ -120,7 +120,7 @@ const deptAudit = async (req, res, next) => {
         }
 
         if (!['dept_pending'].includes(purchase.status)) {
-            return res.status(400).json({ code: 400, message: '该申请不在部门待审状态' });
+            return res.status(400).json({ code: 400, message: '该申请不在待审状态' });
         }
 
         const beforeData = purchase.toJSON();
@@ -130,14 +130,14 @@ const deptAudit = async (req, res, next) => {
             purchase.dept_audit_id = req.user.id;
             purchase.dept_audit_time = new Date();
             purchase.dept_audit_remark = remark;
-            purchase.status = 'super_pending';
+            purchase.status = 'approved';
 
             await sendNotification({
-                title: '采购申请待审批',
-                content: `采购申请 ${purchase.application_code} 已通过部门审核，等待超级管理员审批`,
+                title: '采购申请已通过',
+                content: `您的采购申请 ${purchase.application_code} 已通过审批`,
                 type: 'approval',
                 senderId: req.user.id,
-                recipientRole: 'super_admin',
+                recipient_id: purchase.applicant_id,
                 relatedModule: 'purchase',
                 relatedId: purchase.id
             });
@@ -156,7 +156,7 @@ const deptAudit = async (req, res, next) => {
             ip: req.ip,
             module: '采购管理',
             action: 'deptAudit',
-            actionName: action === 'approve' ? '部门审核通过' : '部门审核驳回',
+            actionName: action === 'approve' ? '审核通过' : '审核驳回',
             entityType: 'PurchaseApplication',
             entityId: purchase.id,
             beforeData,
@@ -185,30 +185,23 @@ const superAudit = async (req, res, next) => {
             return res.status(404).json({ code: 404, message: '采购申请不存在' });
         }
 
-        if (!['dept_pending', 'super_pending'].includes(purchase.status)) {
+        if (!['dept_pending'].includes(purchase.status)) {
             return res.status(400).json({ code: 400, message: '该申请不在待审状态' });
         }
 
         const beforeData = purchase.toJSON();
 
-        if (purchase.status === 'dept_pending') {
+        if (action === 'approve') {
             purchase.dept_audit_status = 'approved';
             purchase.dept_audit_id = req.user.id;
             purchase.dept_audit_time = new Date();
-            purchase.dept_audit_remark = '超级管理员直接审批';
-        }
-
-        if (action === 'approve') {
-            purchase.super_audit_status = 'approved';
-            purchase.super_audit_id = req.user.id;
-            purchase.super_audit_time = new Date();
-            purchase.super_audit_remark = remark;
+            purchase.dept_audit_remark = '超级管理员审批';
             purchase.status = 'approved';
         } else {
-            purchase.super_audit_status = 'rejected';
-            purchase.super_audit_id = req.user.id;
-            purchase.super_audit_time = new Date();
-            purchase.super_audit_remark = remark;
+            purchase.dept_audit_status = 'rejected';
+            purchase.dept_audit_id = req.user.id;
+            purchase.dept_audit_time = new Date();
+            purchase.dept_audit_remark = remark;
             purchase.status = 'rejected';
         }
 
@@ -219,7 +212,7 @@ const superAudit = async (req, res, next) => {
             ip: req.ip,
             module: '采购管理',
             action: 'superAudit',
-            actionName: action === 'approve' ? '超级管理员审核通过' : '超级管理员审核驳回',
+            actionName: action === 'approve' ? '审核通过' : '审核驳回',
             entityType: 'PurchaseApplication',
             entityId: purchase.id,
             beforeData,
@@ -230,7 +223,7 @@ const superAudit = async (req, res, next) => {
 
         await sendNotification({
             title: `采购申请${action === 'approve' ? '已通过' : '已驳回'}`,
-            content: `您的采购申请 ${purchase.application_code} ${action === 'approve' ? '已通过最终审批' : '已被驳回'}`,
+            content: `您的采购申请 ${purchase.application_code} ${action === 'approve' ? '已通过审批' : '已被驳回'}`,
             type: 'approval',
             senderId: req.user.id,
             recipient_id: purchase.applicant_id,
@@ -257,7 +250,7 @@ const withdrawPurchase = async (req, res, next) => {
             return res.status(403).json({ code: 403, message: '只能撤回自己的申请' });
         }
 
-        if (!['draft', 'dept_pending', 'super_pending'].includes(purchase.status)) {
+        if (!['draft', 'dept_pending'].includes(purchase.status)) {
             return res.status(400).json({ code: 400, message: '该申请无法撤回' });
         }
 
@@ -313,7 +306,7 @@ const batchAudit = async (req, res, next) => {
                 whereClause.department_id = req.user.department_id;
             }
         } else {
-            whereClause.status = { [Op.in]: ['dept_pending', 'super_pending'] };
+            whereClause.status = 'dept_pending';
         }
 
         const purchases = await PurchaseApplication.findAll({ where: whereClause });
@@ -334,7 +327,7 @@ const batchAudit = async (req, res, next) => {
 
             if (action === 'approve') {
                 if (auditType === 'dept') {
-                    purchase.status = 'super_pending';
+                    purchase.status = 'approved';
                     purchase.dept_audit_status = 'approved';
                     purchase.dept_audit_id = req.user.id;
                     purchase.dept_audit_time = new Date();

@@ -40,11 +40,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">个人中心</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800">个人中心</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <h2 className="text-lg font-semibold mb-4">基本信息</h2>
           <div className="space-y-4">
             <div className="flex items-center">
@@ -78,7 +78,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <h2 className="text-lg font-semibold mb-4">修改密码</h2>
           <form onSubmit={handleChangePassword} className="space-y-4">
             {message && (

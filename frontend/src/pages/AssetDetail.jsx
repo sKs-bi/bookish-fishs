@@ -34,15 +34,15 @@ const AssetDetail = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center">
           <button onClick={() => navigate('/assets')} className="mr-4 text-gray-500 hover:text-gray-700">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-2xl font-bold text-gray-800">资产详情</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">资产详情</h1>
         </div>
         <span className={`badge ${getStatusBadgeClass(asset.status)} text-base px-4 py-2`}>
           {getStatusText(asset.status)}
@@ -51,9 +51,9 @@ const AssetDetail = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="card p-6">
+          <div className="card p-4 sm:p-6">
             <h2 className="text-lg font-semibold mb-4">基本信息</h2>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-sm text-gray-500">资产编号</p>
                 <p className="font-mono font-medium">{asset.asset_code}</p>
@@ -85,9 +85,9 @@ const AssetDetail = () => {
             </div>
           </div>
 
-          <div className="card p-6">
+          <div className="card p-4 sm:p-6">
             <h2 className="text-lg font-semibold mb-4">财务信息</h2>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-sm text-gray-500">购置日期</p>
                 <p className="font-medium">{formatDate(asset.purchase_date)}</p>
@@ -115,9 +115,9 @@ const AssetDetail = () => {
             </div>
           </div>
 
-          <div className="card p-6">
+          <div className="card p-4 sm:p-6">
             <h2 className="text-lg font-semibold mb-4">责任信息</h2>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-sm text-gray-500">所属部门</p>
                 <p className="font-medium">{asset.department?.name || '-'}</p>
@@ -138,7 +138,7 @@ const AssetDetail = () => {
           </div>
 
           {asset.remarks && (
-            <div className="card p-6">
+            <div className="card p-4 sm:p-6">
               <h2 className="text-lg font-semibold mb-4">备注</h2>
               <p className="text-gray-600">{asset.remarks}</p>
             </div>
@@ -146,7 +146,7 @@ const AssetDetail = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="card p-6">
+          <div className="card p-4 sm:p-6">
             <h2 className="text-lg font-semibold mb-4">资产二维码</h2>
             <div className="flex justify-center bg-white p-4 rounded-lg border">
               <QRCodeSVG value={JSON.stringify({ type: 'asset', id: asset.id, code: asset.asset_code })} size={180} />
@@ -156,7 +156,7 @@ const AssetDetail = () => {
             </p>
           </div>
 
-          <div className="card p-6">
+          <div className="card p-4 sm:p-6">
             <h2 className="text-lg font-semibold mb-4">操作记录</h2>
             <div className="text-center text-gray-500">
               暂无操作记录

@@ -42,9 +42,9 @@ const Notifications = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
           通知中心
           {unreadCount > 0 && (
             <span className="ml-2 text-sm font-normal text-gray-500">({unreadCount}条未读)</span>

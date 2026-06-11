@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import UserCard from '../components/UserCard';
 import { assetAPI, departmentAPI, rejectionAPI } from '../services/api';
 import { formatDate, formatCurrency, getStatusBadgeClass, getStatusText } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import RejectionModal from '../components/RejectionModal';
-import UserCard from '../components/UserCard';
 
 const Assets = () => {
   const [assets, setAssets] = useState([]);
@@ -22,6 +22,7 @@ const Assets = () => {
   const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
   const [deleteAllLoading, setDeleteAllLoading] = useState(false);
   const [rejections, setRejections] = useState([]);
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
   const [currentRejection, setCurrentRejection] = useState(null);
   const fileInputRef = useRef(null);
   const [departments, setDepartments] = useState([]);
@@ -410,13 +411,23 @@ const Assets = () => {
                     </td>
                     <td className="table-cell text-xs sm:text-sm">{formatCurrency(asset.purchase_price)}</td>
                     <td className="table-cell text-xs sm:text-sm">{formatDate(asset.last_repair_date) || '-'}</td>
-                    <td className="table-cell text-xs sm:text-sm">
+                    <td className="table-cell text-xs sm:text-sm relative">
                       {asset.responsible_id ? (
-                        <UserCard userId={asset.responsible_id}>
+                        <span
+                          className="user-name-link"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const rect = e.target.getBoundingClientRect();
+                            setUserCardInfo({ show: true, userId: asset.responsible_id, x: rect.left, y: rect.bottom + 5 });
+                          }}
+                        >
                           {asset.responsible?.real_name || '-'}
-                        </UserCard>
+                        </span>
                       ) : (
-                        <span className="text-gray-500">-</span>
+                        <span>{asset.responsible?.real_name || '-'}</span>
+                      )}
+                      {userCardInfo.show && userCardInfo.userId === asset.responsible_id && (
+                        <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
                       )}
                     </td>
                     <td className="table-cell text-xs sm:text-sm max-w-[100px] truncate" title={asset.remarks}>{asset.remarks || '-'}</td>
@@ -474,7 +485,8 @@ const Assets = () => {
                             拒绝删除
                           </button>
                         )}
-                        {asset.status !== 'pending_delete' && asset.status !== 'pending' && (isAdmin || (asset.status !== 'in_use' && asset.status !== 'repairing')) && (
+                        {/* 管理员可以直接删除资产 */}
+                        {asset.status !== 'pending_delete' && asset.status !== 'pending' && isAdmin && (
                           <button
                             onClick={() => { setDeleteTarget(asset); setShowDeleteModal(true); }}
                             className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-red-500 to-rose-600 text-white text-xs font-semibold rounded-lg hover:from-red-600 hover:to-rose-700 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 transition-all duration-200"

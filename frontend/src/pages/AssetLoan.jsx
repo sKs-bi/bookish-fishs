@@ -1,8 +1,8 @@
+import UserCard from '../components/UserCard';
 import { useState, useEffect } from 'react';
 import { assetAPI } from '../services/api';
 import { formatDate, getStatusBadgeClass, getStatusText } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
-import UserCard from '../components/UserCard';
 
 const AssetLoan = () => {
   const [loans, setLoans] = useState([]);
@@ -13,6 +13,7 @@ const AssetLoan = () => {
   const [showModal, setShowModal] = useState(false);
   const [assets, setAssets] = useState([]);
   const [filters, setFilters] = useState({ status: '' });
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
   const [formData, setFormData] = useState({ asset_id: '', expected_return_date: '', purpose: '' });
   const { user } = useAuthStore();
 
@@ -81,17 +82,17 @@ const AssetLoan = () => {
   const isSuperAdmin = user?.role === 'super_admin';
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">资产领用</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap gap-2 items-center justify-between">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">资产领用</h1>
         <button onClick={() => setShowModal(true)} className="btn btn-primary">
           发起领用
         </button>
       </div>
 
       <div className="card p-4">
-        <div className="flex gap-4">
-          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-40">
+        <div className="flex gap-3 sm:gap-4">
+          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} className="input w-full sm:w-40">
             <option value="">全部状态</option>
             <option value="pending">待处理</option>
             <option value="approved">已通过</option>
@@ -125,15 +126,27 @@ const AssetLoan = () => {
                   <tr key={loan.id} className="hover:bg-gray-50">
                     <td className="table-cell font-mono text-sm">{loan.asset?.asset_code}</td>
                     <td className="table-cell font-medium">{loan.asset?.name}</td>
-                    <td className="table-cell">
-                      {loan.user_id ? (
-                        <UserCard userId={loan.user_id}>
-                          {loan.user?.real_name || '-'}
-                        </UserCard>
-                      ) : (
-                        <span className="text-gray-500">-</span>
-                      )}
-                    </td>
+                    <td className="table-cell relative">
+                        {loan.user_id ? (
+                          <span
+                            className="user-name-link"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.target.getBoundingClientRect();
+                              setUserCardInfo({ show: true, userId: loan.user_id, x: rect.left, y: rect.bottom + 5 });
+                            }}
+                          >
+                            {loan.user?.real_name || '-'}
+                          </span>
+                        ) : (
+                          <span>{loan.user?.real_name || '-'}</span>
+                        )}
+                        {userCardInfo.show && userCardInfo.userId === loan.user_id && (
+                          <div style={{ position: 'fixed', left: userCardInfo.x, top: userCardInfo.y }}>
+                            <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
+                          </div>
+                        )}
+                      </td>
                     <td className="table-cell max-w-xs truncate">{loan.purpose || '-'}</td>
                     <td className="table-cell">{formatDate(loan.expected_return_date)}</td>
                     <td className="table-cell">
@@ -157,7 +170,7 @@ const AssetLoan = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200">
           <p className="text-sm text-gray-500">共 {total} 条记录</p>
           <div className="flex space-x-2">
             <button onClick={() => setPage(page - 1)} disabled={page === 1} className="btn btn-secondary">上一页</button>

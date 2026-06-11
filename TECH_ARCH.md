@@ -291,7 +291,7 @@ CREATE TABLE purchase_applications (
     super_audit_id INT COMMENT '超级管理员审核人ID',
     super_audit_time DATETIME COMMENT '超级管理员审核时间',
     super_audit_remark TEXT COMMENT '超级管理员审核意见',
-    status ENUM('draft', 'dept_pending', 'super_pending', 'approved', 'rejected', 'withdrawn') DEFAULT 'draft' COMMENT '状态',
+    status ENUM('draft', 'dept_pending', 'approved', 'rejected', 'withdrawn') DEFAULT 'draft' COMMENT '状态',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_applicant (applicant_id),
