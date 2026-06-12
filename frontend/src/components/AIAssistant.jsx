@@ -103,7 +103,7 @@ const AIAssistant = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          <span className="text-white font-bold text-sm tracking-wide">AI</span>
+          <span className="text-white font-bold text-xs sm:text-sm tracking-wide">AI助手</span>
         )}
       </button>
 

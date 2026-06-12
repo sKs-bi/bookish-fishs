@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import useToastStore from '../stores/toastStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
@@ -11,34 +12,76 @@ const api = axios.create({
   },
 });
 
+// 请求拦截器：添加token + 触发LoadingBar
 api.interceptors.request.use(
   (config) => {
-    const token = Cookies.get('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    window.dispatchEvent(new Event('api-loading-start'));
+    try {
+      const token = Cookies.get('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (e) {
+      window.dispatchEvent(new Event('api-loading-end'));
     }
     return config;
   },
   (error) => {
+    window.dispatchEvent(new Event('api-loading-end'));
     return Promise.reject(error);
   }
 );
 
+// 响应拦截器：错误处理 + Toast通知 + LoadingBar结束
 api.interceptors.response.use(
   (response) => {
+    window.dispatchEvent(new Event('api-loading-end'));
     return response.data;
   },
   (error) => {
+    window.dispatchEvent(new Event('api-loading-end'));
+
     if (error.response) {
       const { status, data } = error.response;
-      if (status === 401) {
-        Cookies.remove('token', { path: '/' });
-        const currentPath = window.location.pathname;
-        if (currentPath !== '/login' && currentPath !== '/register') {
-          window.location.href = '/login';
-        }
+      const message = data?.message || '请求失败';
+
+      switch (status) {
+        case 400:
+          // 400错误通常是表单验证失败，页面已有内联提示，不重复弹Toast
+          if (!data?.errors) {
+            useToastStore.getState().addToast(message, 'warning');
+          }
+          break;
+        case 401:
+          Cookies.remove('token', { path: '/' });
+          const currentPath = window.location.pathname;
+          if (currentPath !== '/login' && currentPath !== '/register') {
+            window.location.href = '/login?expired=1';
+          }
+          break;
+        case 403:
+          useToastStore.getState().addToast('没有权限执行此操作', 'error');
+          break;
+        case 404:
+          useToastStore.getState().addToast('请求的资源不存在', 'error');
+          break;
+        case 429:
+          useToastStore.getState().addToast(message || '请求过于频繁，请稍后再试', 'warning');
+          break;
+        case 500:
+          useToastStore.getState().addToast('服务器内部错误，请稍后重试', 'error');
+          break;
+        default:
+          useToastStore.getState().addToast('操作失败，请稍后重试', 'error');
       }
       return Promise.reject(data);
+    }
+
+    // 网络错误或请求超时
+    if (error.code === 'ECONNABORTED') {
+      useToastStore.getState().addToast('请求超时，请检查网络连接', 'error');
+    } else if (!error.response) {
+      useToastStore.getState().addToast('网络连接异常，请检查网络', 'error');
     }
     return Promise.reject(error);
   }

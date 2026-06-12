@@ -20,6 +20,9 @@ import Backups from './pages/Backups';
 import AssetTypes from './pages/AssetTypes';
 import RoleUpgradeCenter from './pages/RoleUpgradeCenter';
 import RoleUpgradeApproval from './pages/RoleUpgradeApproval';
+import NotFound from './pages/NotFound';
+import LoadingBar from './components/LoadingBar';
+import ToastContainer from './components/ToastContainer';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuthStore();
@@ -40,6 +43,8 @@ function App() {
 
   return (
     <BrowserRouter>
+      <LoadingBar />
+      <ToastContainer />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -66,6 +71,8 @@ function App() {
           <Route path="role-upgrade" element={<RoleUpgradeCenter />} />
           <Route path="role-upgrade-approval" element={<RoleUpgradeApproval />} />
         </Route>
+        {/* 404路由 — 包裹在ProtectedRoute内，未登录用户先跳转登录页 */}
+        <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

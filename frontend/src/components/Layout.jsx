@@ -92,10 +92,10 @@ const Layout = () => {
                 </div>
               </div>
               <div className="ml-2 sm:ml-3 hidden sm:block">
-                <div className="text-base sm:text-lg font-semibold text-gray-800 leading-tight">
+                <div className="text-base sm:text-lg font-semibold text-gray-900 leading-tight">
                   数<span style={{ color: '#60A5FA' }}>智</span>科<span style={{ color: '#FB923C' }}>技</span>产业学院
                 </div>
-                <div className="text-[10px] tracking-[0.15em] text-gray-800 font-medium">
+                <div className="text-[10px] tracking-[0.15em] text-gray-900 font-medium">
                   DIGITAL <span style={{ color: '#60A5FA' }}>I</span>NTELLIGENCE <span style={{ color: '#FB923C' }}>T</span>ECHNOLOGY
                 </div>
               </div>
@@ -142,10 +142,10 @@ const Layout = () => {
           pt-14 sm:pt-16 lg:pt-0
         `}>
           <div className="lg:hidden absolute top-0 left-0 right-0 h-14 sm:h-16 bg-white border-b border-gray-200 flex flex-col justify-center px-4">
-            <div className="text-lg font-semibold text-gray-800 leading-tight">
+            <div className="text-lg font-semibold text-gray-900 leading-tight">
               数<span style={{ color: '#60A5FA' }}>智</span>科<span style={{ color: '#FB923C' }}>技</span>产业学院
             </div>
-            <div className="text-[10px] tracking-[0.15em] text-gray-800 font-medium">
+            <div className="text-[10px] tracking-[0.15em] text-gray-900 font-medium">
               DIGITAL <span style={{ color: '#60A5FA' }}>I</span>NTELLIGENCE <span style={{ color: '#FB923C' }}>T</span>ECHNOLOGY
             </div>
           </div>
