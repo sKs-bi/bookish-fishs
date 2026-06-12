@@ -33,7 +33,15 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+app.use(express.static(path.join(__dirname, '../../frontend/dist'), {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+        }
+    }
+}));
 
 app.get('/api/health', (req, res) => {
     res.json({ code: 200, message: 'OK', timestamp: new Date().toISOString() });
@@ -50,8 +58,9 @@ app.use('/api/rejections', rejectionRoutes);
 app.use('/api/role-upgrade', roleUpgradeRoutes);
 app.use('/api/ai', aiRoutes);
 
-app.use((req, res) => {
-    res.status(404).json({ code: 404, message: '接口不存在' });
+// SPA fallback: 非API请求返回index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
 });
 
 app.use(errorHandler);
