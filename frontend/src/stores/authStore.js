@@ -27,7 +27,7 @@ const useAuthStore = create((set, get) => ({
     try {
       await authAPI.logout();
     } catch (e) {
-      console.log('登出请求失败', e);
+      // 静默处理登出失败
     }
     Cookies.remove('token', { path: '/' });
     set({ user: null, token: null, isAuthenticated: false });
@@ -39,7 +39,6 @@ const useAuthStore = create((set, get) => ({
       const response = await authAPI.getCurrentUser();
       set({ user: response.data });
     } catch (error) {
-      console.error('获取用户信息失败', error);
       Cookies.remove('token', { path: '/' });
       set({ user: null, token: null, isAuthenticated: false });
     }

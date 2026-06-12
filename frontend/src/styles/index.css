@@ -187,13 +187,6 @@ body {
   50% { transform: translate(20px, 30px) scale(1.08); }
 }
 
-@keyframes loginParticleFloat {
-  0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
-  10% { opacity: 1; transform: translateY(-10px) scale(1); }
-  90% { opacity: 0.6; }
-  100% { opacity: 0; transform: translateY(-80px) scale(0.5); }
-}
-
 @keyframes loginShine {
   0% { transform: translateX(-100%) skewX(-15deg); }
   100% { transform: translateX(200%) skewX(-15deg); }
@@ -415,16 +408,36 @@ body {
   background-size: 50px 50px;
 }
 
-.login-particles {
+.login-particle-canvas {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  z-index: 2;
 }
 
-.login-particle {
+/* 主布局粒子特效 */
+.layout-particle-canvas {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(96, 165, 250, 0.4);
-  animation: loginParticleFloat ease-in-out infinite;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .layout-particle-canvas {
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-particle-canvas {
+    pointer-events: none;
+  }
 }
 
 .login-content {

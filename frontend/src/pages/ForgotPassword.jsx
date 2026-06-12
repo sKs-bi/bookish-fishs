@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import LoginParticles from '../components/LoginParticles';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const ForgotPassword = () => {
         <div className="login-orb login-orb-3"></div>
         <div className="login-grid-overlay"></div>
         <div className="login-noise"></div>
+        <LoginParticles />
       </div>
       <div className="login-content">
         <div className="login-header">

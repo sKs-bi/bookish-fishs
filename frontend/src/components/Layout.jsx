@@ -4,6 +4,7 @@ import useAuthStore from '../stores/authStore';
 import useAppStore from '../stores/appStore';
 import useNotificationStore from '../stores/notificationStore';
 import AIAssistant from './AIAssistant';
+import LayoutParticles from './LayoutParticles';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -171,8 +172,11 @@ const Layout = () => {
           />
         )}
 
-        <main className="flex-1 min-w-0 p-3 sm:p-4 lg:p-6">
-          <Outlet />
+        <main className="flex-1 min-w-0 p-3 sm:p-4 lg:p-6 relative">
+          <LayoutParticles />
+          <div className="relative z-10">
+            <Outlet />
+          </div>
         </main>
       </div>
       <AIAssistant />

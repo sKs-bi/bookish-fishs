@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useAuthStore from '../stores/authStore';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import LoginParticles from '../components/LoginParticles';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -117,19 +118,7 @@ const Login = () => {
             <circle cx="50" cy="50" r="15" fill="none" stroke="rgba(96,165,250,0.02)" strokeWidth="0.5"/>
           </svg>
         </div>
-        <div className="login-particles">
-          {[...Array(25)].map((_, i) => (
-            <div key={i} className="login-particle" style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 4}s`,
-              width: `${1.5 + Math.random() * 3}px`,
-              height: `${1.5 + Math.random() * 3}px`,
-              background: i % 3 === 0 ? 'rgba(251,146,60,0.5)' : 'rgba(96,165,250,0.4)',
-            }}></div>
-          ))}
-        </div>
+        <LoginParticles />
       </div>
 
       <div className="login-content">
