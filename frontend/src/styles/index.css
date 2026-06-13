@@ -1003,39 +1003,7 @@ body {
     padding-top: 1rem;
   }
 
-  .login-qr-code {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  z-index: 20;
-  padding: 12px;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(96, 165, 250, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.login-qr-code:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(96, 165, 250, 0.2);
-}
-.login-qr-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 6px;
-}
-.login-qr-text {
-  color: #94a3b8;
-  font-size: 12px;
-  text-align: center;
-  white-space: nowrap;
-}
-.login-copyright {
+  .login-copyright {
     font-size: 0.6rem;
   }
 
@@ -1172,7 +1140,7 @@ body {
 
 .forgot-success h3 {
   font-size: 1.25rem;
-  color: #ffffff;
+  color: #1e293b;
   margin-bottom: 8px;
 }
 
@@ -1259,7 +1227,7 @@ body {
 .modal-header h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #1e293b;
   margin: 0;
 }
 
