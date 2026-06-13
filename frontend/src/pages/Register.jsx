@@ -196,7 +196,7 @@ const Register = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">注册成功</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">注册成功</h2>
           <p className="text-gray-500 mb-6">您的账号已提交，请等待管理员审核后即可登录</p>
           <button
             onClick={() => navigate('/login')}
@@ -220,13 +220,13 @@ const Register = () => {
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-6">
           <div className="animate-login-title mb-2" style={{ transform: 'rotate(-3deg)' }}>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wider text-gray-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wider text-white leading-tight">
               数<span style={{ color: '#60A5FA' }}>智</span>科<span style={{ color: '#FB923C' }}>技</span>产业学院
             </h1>
           </div>
           <div className="animate-login-sub" style={{ transform: 'rotate(-2deg)' }}>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] font-semibold text-gray-900" style={{ opacity: 0.75 }}>
-              DIGITAL <span style={{ color: '#60A5FA' }}>I</span>NTELLIGENCE <span style={{ color: '#FB923C' }}>T</span>ECHNOLOGY INDUSTRY COLLEGE
+            <p className="text-[10px] sm:text-xs tracking-[0.2em] font-semibold text-white" style={{ opacity: 0.75 }}>
+              DIGITAL <span style={{ color: '#60A5FA' }}>I</span>NTELLIGENCE <span style={{ color: '#FB923C' }}>T</span><span style={{ color: '#ffffff' }}>ECHNOLOGY</span> INDUSTRY COLLEGE
             </p>
           </div>
         </div>

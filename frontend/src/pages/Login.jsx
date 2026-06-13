@@ -109,36 +109,36 @@ const Login = () => {
         </div>
         <div className="login-geo">
           {/* 电路板线路 */}
-          <svg className="login-geo-diamond login-geo-anim-1" width="280" height="180" viewBox="0 0 280 180">
-            <path d="M10,90 L50,90 L50,40 L100,40 L100,90 L140,90 L140,140 L190,140 L190,90 L230,90 L230,50 L270,50" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
-            <path d="M50,90 L50,140 L80,140" fill="none" stroke="rgba(6,182,212,0.3)" strokeWidth="1.5"/>
-            <path d="M140,90 L140,40 L170,40" fill="none" stroke="rgba(6,182,212,0.3)" strokeWidth="1.5"/>
-            <circle cx="50" cy="90" r="5" fill="rgba(96,165,250,0.5)"/>
-            <circle cx="100" cy="40" r="5" fill="rgba(6,182,212,0.5)"/>
-            <circle cx="140" cy="90" r="5" fill="rgba(96,165,250,0.5)"/>
-            <circle cx="190" cy="140" r="5" fill="rgba(6,182,212,0.5)"/>
-            <circle cx="230" cy="90" r="5" fill="rgba(96,165,250,0.5)"/>
-            <circle cx="270" cy="50" r="5" fill="rgba(6,182,212,0.5)"/>
+          <svg className="login-geo-diamond login-geo-anim-1" width="300" height="200" viewBox="0 0 300 200">
+            <path d="M10,100 L60,100 L60,45 L110,45 L110,100 L150,100 L150,155 L200,155 L200,100 L240,100 L240,55 L280,55" fill="none" stroke="rgba(59,130,246,0.5)" strokeWidth="2.5"/>
+            <path d="M60,100 L60,155 L90,155" fill="none" stroke="rgba(6,182,212,0.45)" strokeWidth="2"/>
+            <path d="M150,100 L150,45 L180,45" fill="none" stroke="rgba(6,182,212,0.45)" strokeWidth="2"/>
+            <circle cx="60" cy="100" r="6" fill="rgba(96,165,250,0.6)"/>
+            <circle cx="110" cy="45" r="6" fill="rgba(6,182,212,0.6)"/>
+            <circle cx="150" cy="100" r="6" fill="rgba(96,165,250,0.6)"/>
+            <circle cx="200" cy="155" r="6" fill="rgba(6,182,212,0.6)"/>
+            <circle cx="240" cy="100" r="6" fill="rgba(96,165,250,0.6)"/>
+            <circle cx="280" cy="55" r="6" fill="rgba(6,182,212,0.6)"/>
           </svg>
           {/* 数据芯片 */}
-          <svg className="login-geo-diamond login-geo-anim-2" width="140" height="140" viewBox="0 0 140 140">
-            <rect x="25" y="25" width="90" height="90" rx="8" fill="none" stroke="rgba(59,130,246,0.3)" strokeWidth="2"/>
-            <rect x="40" y="40" width="60" height="60" rx="4" fill="none" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="25" y1="48" x2="5" y2="48" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="25" y1="70" x2="5" y2="70" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="25" y1="92" x2="5" y2="92" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="115" y1="48" x2="135" y2="48" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="115" y1="70" x2="135" y2="70" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="115" y1="92" x2="135" y2="92" stroke="rgba(59,130,246,0.25)" strokeWidth="1.5"/>
-            <line x1="48" y1="25" x2="48" y2="5" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="70" y1="25" x2="70" y2="5" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="92" y1="25" x2="92" y2="5" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="48" y1="115" x2="48" y2="135" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="70" y1="115" x2="70" y2="135" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <line x1="92" y1="115" x2="92" y2="135" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
-            <circle cx="70" cy="70" r="4" fill="rgba(96,165,250,0.4)"/>
+          <svg className="login-geo-diamond login-geo-anim-2" width="160" height="160" viewBox="0 0 160 160">
+            <rect x="28" y="28" width="104" height="104" rx="10" fill="none" stroke="rgba(59,130,246,0.45)" strokeWidth="2.5"/>
+            <rect x="45" y="45" width="70" height="70" rx="5" fill="none" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="28" y1="55" x2="5" y2="55" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="28" y1="80" x2="5" y2="80" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="28" y1="105" x2="5" y2="105" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="132" y1="55" x2="155" y2="55" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="132" y1="80" x2="155" y2="80" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="132" y1="105" x2="155" y2="105" stroke="rgba(59,130,246,0.35)" strokeWidth="2"/>
+            <line x1="55" y1="28" x2="55" y2="5" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="80" y1="28" x2="80" y2="5" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="105" y1="28" x2="105" y2="5" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="55" y1="132" x2="55" y2="155" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="80" y1="132" x2="80" y2="155" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <line x1="105" y1="132" x2="105" y2="155" stroke="rgba(6,182,212,0.35)" strokeWidth="2"/>
+            <circle cx="80" cy="80" r="5" fill="rgba(96,165,250,0.5)"/>
           </svg>
-          {/* 二进制代码流 - 改为CSS动画驱动，多个流动元素 */}
+          {/* 二进制代码流 - CSS动画驱动 */}
           <div className="login-binary-flow">
             <span className="binary-str binary-str-1">01101001</span>
             <span className="binary-str binary-str-2">10010110</span>
@@ -150,34 +150,37 @@ const Login = () => {
             <span className="binary-str binary-str-8">00101101</span>
           </div>
           {/* 数据图表 */}
-          <svg className="login-geo-hex login-geo-anim-4" width="180" height="120" viewBox="0 0 180 120">
-            <polyline points="10,95 35,65 65,78 100,30 140,50 170,18" fill="none" stroke="rgba(59,130,246,0.3)" strokeWidth="2.2"/>
-            <line x1="10" y1="108" x2="170" y2="108" stroke="rgba(6,182,212,0.18)" strokeWidth="1.2"/>
-            <line x1="10" y1="18" x2="10" y2="108" stroke="rgba(6,182,212,0.18)" strokeWidth="1.2"/>
-            <circle cx="35" cy="65" r="4.5" fill="rgba(96,165,250,0.5)"/>
-            <circle cx="100" cy="30" r="4.5" fill="rgba(6,182,212,0.5)"/>
-            <circle cx="170" cy="18" r="4.5" fill="rgba(96,165,250,0.5)"/>
-            <path d="M10,95 L35,65 L65,78 L100,30 L140,50 L170,18 L170,108 L10,108 Z" fill="rgba(59,130,246,0.06)"/>
+          <svg className="login-geo-hex login-geo-anim-4" width="200" height="140" viewBox="0 0 200 140">
+            <polyline points="10,110 40,75 70,88 110,35 150,55 185,20" fill="none" stroke="rgba(59,130,246,0.45)" strokeWidth="2.8"/>
+            <line x1="10" y1="125" x2="185" y2="125" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
+            <line x1="10" y1="20" x2="10" y2="125" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5"/>
+            <circle cx="40" cy="75" r="5.5" fill="rgba(96,165,250,0.6)"/>
+            <circle cx="110" cy="35" r="5.5" fill="rgba(6,182,212,0.6)"/>
+            <circle cx="185" cy="20" r="5.5" fill="rgba(96,165,250,0.6)"/>
+            <path d="M10,110 L40,75 L70,88 L110,35 L150,55 L185,20 L185,125 L10,125 Z" fill="rgba(59,130,246,0.08)"/>
           </svg>
           {/* 六边形网格 */}
-          <svg className="login-geo-circle login-geo-anim-5" width="240" height="180" viewBox="0 0 240 180">
-            <polygon points="35,10 55,10 65,27 55,44 35,44 25,27" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="55,10 75,10 85,27 75,44 55,44 65,27" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="75,10 95,10 105,27 95,44 75,44 85,27" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="95,10 115,10 125,27 115,44 95,44 105,27" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="115,10 135,10 145,27 135,44 115,44 125,27" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="25,44 45,44 55,61 45,78 25,78 15,61" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="45,44 65,44 75,61 65,78 45,78 55,61" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="65,44 85,44 95,61 85,78 65,78 75,61" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="85,44 105,44 115,61 105,78 85,78 95,61" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="105,44 125,44 135,61 125,78 105,78 115,61" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="35,78 55,78 65,95 55,112 35,112 25,95" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="55,78 75,78 85,95 75,112 55,112 65,95" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="75,78 95,78 105,95 95,112 75,112 85,95" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="95,78 115,78 125,95 115,112 95,112 105,95" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="115,78 135,78 145,95 135,112 115,112 125,95" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
-            <polygon points="135,78 155,78 165,95 155,112 135,112 145,95" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5"/>
-            <polygon points="155,78 175,78 185,95 175,112 155,112 165,95" fill="none" stroke="rgba(59,130,246,0.18)" strokeWidth="1.5"/>
+          <svg className="login-geo-circle login-geo-anim-5" width="260" height="200" viewBox="0 0 260 200">
+            <polygon points="35,10 55,10 65,27 55,44 35,44 25,27" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="55,10 75,10 85,27 75,44 55,44 65,27" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="75,10 95,10 105,27 95,44 75,44 85,27" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="95,10 115,10 125,27 115,44 95,44 105,27" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="115,10 135,10 145,27 135,44 115,44 125,27" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="135,10 155,10 165,27 155,44 135,44 145,27" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="25,44 45,44 55,61 45,78 25,78 15,61" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="45,44 65,44 75,61 65,78 45,78 55,61" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="65,44 85,44 95,61 85,78 65,78 75,61" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="85,44 105,44 115,61 105,78 85,78 95,61" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="105,44 125,44 135,61 125,78 105,78 115,61" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="125,44 145,44 155,61 145,78 125,78 135,61" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="35,78 55,78 65,95 55,112 35,112 25,95" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="55,78 75,78 85,95 75,112 55,112 65,95" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="75,78 95,78 105,95 95,112 75,112 85,95" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="95,78 115,78 125,95 115,112 95,112 105,95" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="115,78 135,78 145,95 135,112 115,112 125,95" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="135,78 155,78 165,95 155,112 135,112 145,95" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
+            <polygon points="155,78 175,78 185,95 175,112 155,112 165,95" fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="1.8"/>
+            <polygon points="175,78 195,78 205,95 195,112 175,112 185,95" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1.8"/>
           </svg>
         </div>
         <LoginParticles />
@@ -191,7 +194,7 @@ const Login = () => {
         </div>
         <div className="login-header-sub animate-login-sub">
           <p className="login-subtitle">
-            DIGITAL <span className="login-char-zhi">I</span>NTELLIGENCE <span className="login-char-ji">T</span>ECHNOLOGY INDUSTRY COLLEGE
+            DIGITAL <span className="login-char-zhi">I</span>NTELLIGENCE <span className="login-char-ji">T</span><span className="login-char-white">ECHNOLOGY</span> INDUSTRY COLLEGE
           </p>
         </div>
 

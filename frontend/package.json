@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --outDir dist_tmp && rm -rf dist && mv dist_tmp dist",
     "preview": "vite preview"
   },
   "dependencies": {
