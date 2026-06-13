@@ -346,7 +346,11 @@ const Login = () => {
           </div>
         )}
 
-        <p className="login-copyright">© 2024 数智科技产业学院 · 资产管理平台</p>
+        <div className="login-qr-code">
+          <img src="/qr-code.png" alt="手机端访问" className="login-qr-img" />
+          <p className="login-qr-text">扫码访问手机端</p>
+        </div>
+        <p className="login-copyright">© 2026 数智科技产业学院 · 资产管理平台</p>
       </div>
     </div>
   );
