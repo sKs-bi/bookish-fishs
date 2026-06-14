@@ -3,18 +3,21 @@ import { aiAPI } from '../services/api';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState('sk-abe5b63210f24c6989825716efad6e02');
   const [isApiKeySet, setIsApiKeySet] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // 从sessionStorage读取API Key
+  // 从sessionStorage读取API Key，若无则使用默认Key
   useEffect(() => {
     const savedKey = sessionStorage.getItem('qianwen_api_key');
     if (savedKey) {
       setApiKey(savedKey);
+      setIsApiKeySet(true);
+    } else {
+      sessionStorage.setItem('qianwen_api_key', apiKey);
       setIsApiKeySet(true);
     }
   }, []);
@@ -32,11 +35,10 @@ const AIAssistant = () => {
     ]);
   };
 
-  // 清除API Key
+  // 更换API Key（进入输入界面）
   const handleClearApiKey = () => {
-    sessionStorage.removeItem('qianwen_api_key');
-    setApiKey('');
     setIsApiKeySet(false);
+    setApiKey('');
     setMessages([]);
   };
 
