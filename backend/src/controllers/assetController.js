@@ -1272,6 +1272,22 @@ const rejectDeleteAsset = async (req, res, next) => {
     }
 };
 
+const getLocations = async (req, res, next) => {
+    try {
+        const locations = await Asset.findAll({
+            attributes: ['location'],
+            where: { location: { [Op.ne]: null, [Op.ne]: '' } },
+            group: ['location'],
+            order: [['location', 'ASC']],
+            raw: true
+        });
+        const locationList = locations.map(l => l.location).filter(Boolean);
+        res.json({ code: 200, message: 'success', data: locationList });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAssets,
     getAssetById,
@@ -1285,6 +1301,7 @@ module.exports = {
     rejectDeleteAsset,
     getAssetQRCode,
     getAssetTypes,
+    getLocations,
     createAssetType,
     deleteAssetType,
     importAssets,

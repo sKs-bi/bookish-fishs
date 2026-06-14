@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get('/', auth, assetController.getAssets);
 router.get('/types', auth, assetController.getAssetTypes);
+router.get('/locations', auth, assetController.getLocations);
 router.get('/loans/list', auth, assetController.getAssetLoans);
 
 router.post('/loans', auth, [

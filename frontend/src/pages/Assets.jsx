@@ -27,6 +27,7 @@ const Assets = () => {
   const fileInputRef = useRef(null);
   const [departments, setDepartments] = useState([]);
   const [assetTypes, setAssetTypes] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [filters, setFilters] = useState({ keyword: '', type_id: '', status: '', department_id: '' });
   const [formData, setFormData] = useState({
     name: '', serial_number: '', type_id: '', brand: '', model: '', spec: '',
@@ -64,6 +65,15 @@ const Assets = () => {
       setAssetTypes(response.data || []);
     } catch (error) {
       console.error('获取资产类型失败', error);
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const response = await assetAPI.getLocations();
+      setLocations(response.data || []);
+    } catch (error) {
+      console.error('获取存放位置失败', error);
     }
   };
 
@@ -129,6 +139,7 @@ const Assets = () => {
   useEffect(() => {
     fetchDepartments();
     fetchAssetTypes();
+    fetchLocations();
     checkRejections();
   }, []);
 
@@ -141,7 +152,12 @@ const Assets = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await assetAPI.create(formData);
+      const submitData = { ...formData };
+      if (submitData.location === '__custom__') {
+        submitData.location = submitData._customLocation || '';
+      }
+      delete submitData._customLocation;
+      const response = await assetAPI.create(submitData);
       setShowModal(false);
       setFormData({
         name: '', serial_number: '', type_id: '', brand: '', model: '', spec: '',
@@ -566,7 +582,18 @@ const Assets = () => {
                 </div>
                 <div>
                   <label className="label">存放位置</label>
-                  <input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} className="input" />
+                  {formData.location === '__custom__' ? (
+                    <div className="flex gap-2">
+                      <input type="text" value={formData._customLocation || ''} onChange={(e) => setFormData({ ...formData, _customLocation: e.target.value })} className="input" placeholder="输入存放位置" autoFocus />
+                      <button type="button" onClick={() => setFormData({ ...formData, location: '', _customLocation: '' })} className="btn btn-secondary whitespace-nowrap text-xs px-2">取消</button>
+                    </div>
+                  ) : (
+                    <select value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} className="input">
+                      <option value="">请选择</option>
+                      {locations.map((loc, idx) => <option key={idx} value={loc}>{loc}</option>)}
+                      <option value="__custom__">自定义输入...</option>
+                    </select>
+                  )}
                 </div>
                 <div className="sm:col-span-2">
                   <label className="label">所属部门{isAdmin && ' *'}</label>

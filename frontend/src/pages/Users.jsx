@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { userAPI, departmentAPI } from '../services/api';
 import { formatDateTime, getStatusBadgeClass, getStatusText, getRoleText, getRoleBadgeClass } from '../utils/helpers';
 import useAuthStore from '../stores/authStore';
+import UserCard from '../components/UserCard';
 
 const Users = () => {
   const { user: currentUser } = useAuthStore();
@@ -14,6 +15,7 @@ const Users = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [filters, setFilters] = useState({ keyword: '', role: '', status: '', department_id: '' });
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -178,7 +180,17 @@ const Users = () => {
                 users.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="table-cell font-medium">{user.username}</td>
-                    <td className="table-cell">{user.real_name}</td>
+                    <td className="table-cell">
+                      <span
+                        className="user-name-link"
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setUserCardInfo({ show: true, userId: user.id, x: rect.left, y: rect.bottom + 5 });
+                        }}
+                      >
+                        {user.real_name}
+                      </span>
+                    </td>
                     <td className="table-cell">
                       <span className={`badge ${getRoleBadgeClass(user.role)}`}>
                         {getRoleText(user.role)}
@@ -275,6 +287,9 @@ const Users = () => {
           </div>
         </div>
       </div>
+      {userCardInfo.show && (
+        <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
+      )}
     </div>
   );
 };

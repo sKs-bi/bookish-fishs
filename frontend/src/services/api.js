@@ -124,6 +124,7 @@ export const assetAPI = {
   update: (id, data) => api.put(`/assets/${id}`, data),
   delete: (id) => api.delete(`/assets/${id}`),
   getTypes: () => api.get('/assets/types'),
+  getLocations: () => api.get('/assets/locations'),
   createType: (data) => api.post('/assets/types', data),
   deleteType: (id) => api.delete(`/assets/types/${id}`),
   deleteAll: () => api.delete('/assets/batch/all'),

@@ -5,6 +5,7 @@ import useAppStore from '../stores/appStore';
 import useNotificationStore from '../stores/notificationStore';
 import AIAssistant from './AIAssistant';
 import LayoutParticles from './LayoutParticles';
+import UserCard from './UserCard';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Layout = () => {
   const { unreadCount, fetchNotifications } = useNotificationStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState({});
+  const [userCardInfo, setUserCardInfo] = useState({ show: false, userId: null, x: 0, y: 0 });
 
   useEffect(() => {
     fetchStatistics();
@@ -62,7 +64,7 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+      <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between h-14 sm:h-16">
             <div className="flex items-center">
@@ -115,7 +117,10 @@ const Layout = () => {
                   </span>
                 )}
               </button>
-              <div className="flex items-center">
+              <div className="flex items-center cursor-pointer" onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setUserCardInfo({ show: true, userId: user?.id, x: rect.left, y: rect.bottom + 5 });
+              }}>
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-medium text-sm sm:text-base">
                   {user?.real_name?.charAt(0) || 'U'}
                 </div>
@@ -123,13 +128,13 @@ const Layout = () => {
                   <p className="text-xs sm:text-sm font-medium text-gray-700">{user?.real_name}</p>
                   <p className="text-xs text-gray-500">{getRoleText(user?.role)}</p>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="ml-1.5 sm:ml-4 text-xs sm:text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap"
-                >
-                  退出
-                </button>
               </div>
+              <button
+                onClick={handleLogout}
+                className="ml-1.5 sm:ml-4 text-xs sm:text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap"
+              >
+                退出
+              </button>
             </div>
           </div>
         </div>
@@ -215,6 +220,9 @@ const Layout = () => {
         </main>
       </div>
       <AIAssistant />
+      {userCardInfo.show && (
+        <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
+      )}
     </div>
   );
 };
