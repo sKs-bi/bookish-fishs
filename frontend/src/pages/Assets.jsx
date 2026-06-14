@@ -442,9 +442,6 @@ const Assets = () => {
                       ) : (
                         <span>{asset.responsible?.real_name || '-'}</span>
                       )}
-                      {userCardInfo.show && userCardInfo.userId === asset.responsible_id && (
-                        <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
-                      )}
                     </td>
                     <td className="table-cell text-xs sm:text-sm max-w-[100px] truncate" title={asset.remarks}>{asset.remarks || '-'}</td>
                     <td className="table-cell text-center">
@@ -782,6 +779,9 @@ const Assets = () => {
           onReapply={handleReapply}
           onMarkRead={handleMarkRead}
         />
+      )}
+      {userCardInfo.show && (
+        <UserCard userId={userCardInfo.userId} x={userCardInfo.x} y={userCardInfo.y} onClose={() => setUserCardInfo({ show: false, userId: null, x: 0, y: 0 })} />
       )}
     </div>
   );
